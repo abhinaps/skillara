@@ -20,12 +20,12 @@ async function verifyDatabase() {
     // Check tables
     console.log('📋 Checking database tables...');
     const tableResult = await db.query(`
-      SELECT table_name 
-      FROM information_schema.tables 
-      WHERE table_schema = 'public' 
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
       ORDER BY table_name
     `);
-    
+
     const expectedTables = [
       'analysis_sessions',
       'career_gaps',
@@ -49,7 +49,7 @@ async function verifyDatabase() {
     ];
 
     const actualTables = tableResult.rows.map(row => row.table_name).sort();
-    
+
     console.log(`✅ Found ${actualTables.length} tables:`);
     actualTables.forEach(table => console.log(`   • ${table}`));
 
@@ -73,12 +73,12 @@ async function verifyDatabase() {
 
     // Show sample skills by category
     const categoriesResult = await db.query(`
-      SELECT category, COUNT(*) as count 
-      FROM skills_taxonomy 
-      GROUP BY category 
+      SELECT category, COUNT(*) as count
+      FROM skills_taxonomy
+      GROUP BY category
       ORDER BY count DESC
     `);
-    
+
     console.log('\n📊 Skills by category:');
     categoriesResult.rows.forEach(row => {
       console.log(`   • ${row.category}: ${row.count} skills`);
@@ -87,13 +87,13 @@ async function verifyDatabase() {
     // Check database indexes
     console.log('\n🔍 Checking database indexes...');
     const indexResult = await db.query(`
-      SELECT indexname 
-      FROM pg_indexes 
-      WHERE schemaname = 'public' 
+      SELECT indexname
+      FROM pg_indexes
+      WHERE schemaname = 'public'
       AND indexname NOT LIKE '%_pkey'
       ORDER BY indexname
     `);
-    
+
     console.log(`✅ Found ${indexResult.rows.length} custom indexes:`);
     indexResult.rows.forEach(row => console.log(`   • ${row.indexname}`));
 
@@ -103,7 +103,7 @@ async function verifyDatabase() {
     console.log('   1. Start the backend server: npm run dev');
     console.log('   2. Connect frontend to backend API');
     console.log('   3. Begin implementing skill extraction features');
-    
+
     return true;
 
   } catch (error) {

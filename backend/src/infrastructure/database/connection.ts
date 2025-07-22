@@ -44,7 +44,7 @@ export async function testConnection(): Promise<boolean> {
 export async function runMigrations(): Promise<void> {
   try {
     console.log('🔄 Running database migrations...');
-    
+
     const migrationsDir = path.join(__dirname, '../../../../database/migrations');
     const migrationFiles = fs.readdirSync(migrationsDir)
       .filter(file => file.endsWith('.sql'))
@@ -53,14 +53,14 @@ export async function runMigrations(): Promise<void> {
     for (const file of migrationFiles) {
       console.log(`📄 Running migration: ${file}`);
       const sqlContent = fs.readFileSync(
-        path.join(migrationsDir, file), 
+        path.join(migrationsDir, file),
         'utf8'
       );
-      
+
       await pool.query(sqlContent);
       console.log(`✅ Migration completed: ${file}`);
     }
-    
+
     console.log('🎉 All migrations completed successfully!');
   } catch (error) {
     console.error('❌ Migration failed:', error);
@@ -74,9 +74,9 @@ export async function runMigrations(): Promise<void> {
 export async function seedDatabase(): Promise<void> {
   try {
     console.log('🌱 Seeding database...');
-    
+
     const seedsDir = path.join(__dirname, '../../../../database/seeds');
-    
+
     if (!fs.existsSync(seedsDir)) {
       console.log('ℹ️ No seeds directory found, skipping seeding');
       return;
@@ -89,14 +89,14 @@ export async function seedDatabase(): Promise<void> {
     for (const file of seedFiles) {
       console.log(`🌱 Running seed: ${file}`);
       const sqlContent = fs.readFileSync(
-        path.join(seedsDir, file), 
+        path.join(seedsDir, file),
         'utf8'
       );
-      
+
       await pool.query(sqlContent);
       console.log(`✅ Seed completed: ${file}`);
     }
-    
+
     console.log('🎉 Database seeding completed successfully!');
   } catch (error) {
     console.error('❌ Database seeding failed:', error);

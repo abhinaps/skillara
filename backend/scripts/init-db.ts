@@ -9,7 +9,7 @@ import { initializeDatabase } from '../src/infrastructure/database/connection';
 
 async function main() {
   console.log('🚀 Starting Skillara database initialization...');
-  
+
   try {
     await initializeDatabase();
     console.log('✅ Database initialization completed successfully!');

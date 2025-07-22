@@ -56,7 +56,7 @@ INSERT INTO skills_taxonomy (skill_name, standardized_name, category, subcategor
 ('Scrum', 'scrum', 'project_management', 'framework', 'Framework for implementing Agile development', 85, 2, 4, 5000.00, ARRAY[]::text[], true, 'stable');
 
 -- Update the created_at and updated_at timestamps
-UPDATE skills_taxonomy SET 
+UPDATE skills_taxonomy SET
     created_at = NOW(),
     last_updated = NOW()
 WHERE created_at IS NULL;
