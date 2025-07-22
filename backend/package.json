@@ -4,14 +4,30 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "dev": "ts-node src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit",
+    "db:init": "ts-node scripts/init-db.ts",
+    "db:migrate": "ts-node -e \"import('./src/infrastructure/database/connection').then(m => m.runMigrations())\"",
+    "db:seed": "ts-node -e \"import('./src/infrastructure/database/connection').then(m => m.seedDatabase())\"",
+    "db:test": "ts-node -e \"import('./src/infrastructure/database/connection').then(m => m.testConnection())\"",
+    "db:verify": "ts-node scripts/verify-db.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^5.1.0"
+    "@types/pg": "^8.15.4",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
