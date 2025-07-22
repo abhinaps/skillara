@@ -3,7 +3,7 @@ services:
     image: node:18
     working_dir: /app
     volumes:
-      - ./:/app      docker exec -it <node_container_name> node --version
+      - ./:/app
     command: tail -f /dev/null # Keeps container running for development
     ports:
       - "3000:3000"
@@ -11,23 +11,35 @@ services:
       - NODE_ENV=development
 
   postgres:
-    image: postgres:15
+    image: postgres:15-alpine
     restart: always
     environment:
       POSTGRES_DB: skillara_dev
       POSTGRES_USER: skillara_user
-      POSTGRES_PASSWORD: your_secure_password
+      POSTGRES_PASSWORD: skillara_dev_password
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./database/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skillara_user -d skillara_dev"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   redis:
-    image: redis:7
+    image: redis:7-alpine
     ports:
       - "6379:6379"
     volumes:
       - redisdata:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   pgdata:
