@@ -105,6 +105,31 @@ export async function seedDatabase(): Promise<void> {
 }
 
 /**
+ * Seed database with a specific seed file
+ */
+export async function seedSpecific(filename: string): Promise<void> {
+  try {
+    console.log(`🌱 Running specific seed: ${filename}...`);
+
+    const seedsDir = path.join(__dirname, '../../../../database/seeds');
+    const seedFilePath = path.join(seedsDir, filename);
+
+    if (!fs.existsSync(seedFilePath)) {
+      console.error(`❌ Seed file not found: ${filename}`);
+      throw new Error(`Seed file not found: ${filename}`);
+    }
+
+    const sqlContent = fs.readFileSync(seedFilePath, 'utf8');
+    await pool.query(sqlContent);
+
+    console.log(`✅ Specific seed completed: ${filename}`);
+  } catch (error) {
+    console.error(`❌ Specific seed failed for ${filename}:`, error);
+    throw error;
+  }
+}
+
+/**
  * Initialize database (run migrations and seeds)
  */
 export async function initializeDatabase(): Promise<void> {

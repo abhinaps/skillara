@@ -4,9 +4,14 @@ node_modules/
 # Build output
 dist/
 build/
+**/dist/
+**/build/
+.next/
+out/
 
 # TypeScript build info
 *.tsbuildinfo
+**/*.tsbuildinfo
 
 # Environment files
 .env
@@ -30,3 +35,6 @@ Thumbs.db
 # Docker volumes (if used)
 pgdata/
 redisdata/
+
+# Documentation output
+**/*.md
