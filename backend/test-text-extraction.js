@@ -5,35 +5,35 @@ const path = require('path');
 async function testTextExtraction() {
   try {
     console.log('🔄 Testing text extraction from stored PDF...');
-    
+
     // Path to the stored PDF (from the database check)
     const storedPdfPath = path.join(__dirname, 'uploads', 'documents', '9449b63f-345c-4a7d-bfb1-5ef41d90d2c9.pdf');
-    
+
     // Check if file exists
     if (!fs.existsSync(storedPdfPath)) {
       console.log('❌ Stored PDF file not found at:', storedPdfPath);
       return;
     }
-    
+
     console.log('✅ Found stored PDF file');
     console.log('📊 File size:', fs.statSync(storedPdfPath).size, 'bytes');
-    
+
     // Try to read the PDF and extract text using pdf-parse
     const pdf = require('pdf-parse');
     const pdfBuffer = fs.readFileSync(storedPdfPath);
-    
+
     console.log('🔄 Extracting text from PDF...');
     const pdfData = await pdf(pdfBuffer);
-    
+
     console.log('✅ Text extraction completed!');
     console.log('📄 Pages:', pdfData.numpages);
     console.log('📝 Text length:', pdfData.text.length, 'characters');
     console.log('🔤 First 200 characters:');
     console.log(pdfData.text.substring(0, 200) + '...');
-    
+
     // Test structured extraction
     console.log('\n🔄 Testing structured text analysis...');
-    
+
     // Look for common resume sections
     const text = pdfData.text.toLowerCase();
     const sections = {
@@ -42,7 +42,7 @@ async function testTextExtraction() {
       'Education': /education|degree|university|college|school/gi.test(pdfData.text),
       'Skills': /skills|technologies|programming|languages/gi.test(pdfData.text)
     };
-    
+
     console.log('📋 Detected sections:');
     Object.entries(sections).forEach(([section, found]) => {
       console.log(`  ${found ? '✅' : '❌'} ${section}`);
@@ -50,7 +50,7 @@ async function testTextExtraction() {
 
     // Enhanced skill detection
     console.log('\n🔍 Detecting technical skills...');
-    
+
     const skillPatterns = {
       'Programming Languages': [
         'javascript', 'typescript', 'python', 'java', 'c#', 'c++', 'php', 'ruby', 'go', 'rust',
@@ -80,7 +80,7 @@ async function testTextExtraction() {
 
     const detectedSkills = {};
     const allText = pdfData.text.toLowerCase();
-    
+
     Object.entries(skillPatterns).forEach(([category, skills]) => {
       const foundSkills = skills.filter(skill => {
         const variations = [
@@ -92,7 +92,7 @@ async function testTextExtraction() {
         ];
         return variations.some(variation => allText.includes(variation.toLowerCase()));
       });
-      
+
       if (foundSkills.length > 0) {
         detectedSkills[category] = foundSkills;
       }
@@ -134,7 +134,7 @@ async function testTextExtraction() {
     words.forEach(word => {
       wordCount[word] = (wordCount[word] || 0) + 1;
     });
-    
+
     const frequentWords = Object.entries(wordCount)
       .filter(([word, count]) => count > 2 && !['the', 'and', 'for', 'with', 'this', 'that', 'from', 'have', 'been', 'will'].includes(word))
       .sort((a, b) => b[1] - a[1])
@@ -154,9 +154,9 @@ async function testTextExtraction() {
         items.forEach(item => console.log(`    🔸 ${item}`));
       }
     });
-    
+
     console.log('\n🎉 Text extraction test completed successfully!');
-    
+
   } catch (error) {
     console.error('❌ Error during text extraction:', error);
   }

@@ -22,10 +22,10 @@ async function createTestSession() {
     // Insert session
     const query = `
       INSERT INTO analysis_sessions (
-        id, 
-        session_token, 
-        session_status, 
-        privacy_consent, 
+        id,
+        session_token,
+        session_status,
+        privacy_consent,
         expires_at,
         is_persistent
       ) VALUES ($1, $2, $3, $4, $5, $6)

@@ -3,6 +3,7 @@ import { testConnection } from './infrastructure/database/connection';
 import { DIContainer } from './infrastructure/DIContainer';
 import { createSkillRoutes } from './adapters/primary/web/routes/skillRoutes';
 import { createUploadRoutes } from './adapters/primary/web/routes/uploadRoutes';
+import { createSessionRoutes } from './adapters/primary/web/routes/sessionRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -42,6 +43,7 @@ async function startServer() {
     console.log('🔄 Setting up routes...');
     app.use('/api', createSkillRoutes(container.skillController));
     app.use('/api', createUploadRoutes(container.fileUploadController));
+    app.use('/api', createSessionRoutes());
 
     // Health check endpoint
     app.get('/health', (req, res) => {

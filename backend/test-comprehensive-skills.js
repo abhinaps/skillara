@@ -4,7 +4,7 @@ const path = require('path');
 // Test with a mock resume text to show skill detection capabilities
 async function testSkillDetectionWithMockResume() {
   console.log('🔄 Testing skill detection with mock resume content...');
-  
+
   // Mock resume text to demonstrate skill detection
   const mockResumeText = `
     John Doe
@@ -21,7 +21,7 @@ async function testSkillDetectionWithMockResume() {
     • Used AWS services including EC2, S3, and RDS
     • Collaborated using Git, GitHub, and Jira
 
-    Frontend Developer - StartupXYZ (2018-2020)  
+    Frontend Developer - StartupXYZ (2018-2020)
     • Created responsive UIs with HTML5, CSS3, and JavaScript
     • Worked with Angular and Vue.js frameworks
     • Used Webpack and Sass for build processes
@@ -69,7 +69,7 @@ async function testSkillDetectionWithMockResume() {
 
   const detectedSkills = {};
   const allText = mockResumeText.toLowerCase();
-  
+
   Object.entries(skillPatterns).forEach(([category, skills]) => {
     const foundSkills = skills.filter(skill => {
       const variations = [
@@ -81,7 +81,7 @@ async function testSkillDetectionWithMockResume() {
       ];
       return variations.some(variation => allText.includes(variation.toLowerCase()));
     });
-    
+
     if (foundSkills.length > 0) {
       detectedSkills[category] = foundSkills;
     }
@@ -90,7 +90,7 @@ async function testSkillDetectionWithMockResume() {
   // Display results
   console.log('📄 Mock Resume Analysis Results:');
   console.log('📝 Text length:', mockResumeText.length, 'characters');
-  
+
   if (Object.keys(detectedSkills).length > 0) {
     console.log('\n🎯 Detected Skills:');
     Object.entries(detectedSkills).forEach(([category, skills]) => {
@@ -99,7 +99,7 @@ async function testSkillDetectionWithMockResume() {
         console.log(`    ✅ ${skill}`);
       });
     });
-    
+
     // Count total skills
     const totalSkills = Object.values(detectedSkills).reduce((sum, skills) => sum + skills.length, 0);
     console.log(`\n📊 Total Skills Detected: ${totalSkills}`);
@@ -128,14 +128,14 @@ async function testSkillDetectionWithMockResume() {
 // Test both real PDF and mock resume
 async function runBothTests() {
   console.log('=' .repeat(60));
-  console.log('🧪 COMPREHENSIVE SKILL DETECTION TEST');  
+  console.log('🧪 COMPREHENSIVE SKILL DETECTION TEST');
   console.log('=' .repeat(60));
-  
+
   // First test with actual PDF
   await testActualPDF();
-  
+
   console.log('\n' + '=' .repeat(60));
-  
+
   // Then test with mock resume
   await testSkillDetectionWithMockResume();
 }
@@ -143,23 +143,23 @@ async function runBothTests() {
 async function testActualPDF() {
   console.log('📄 PART 1: Real PDF Analysis (From16_A.pdf)');
   console.log('-' .repeat(40));
-  
+
   try {
     const storedPdfPath = path.join(__dirname, 'uploads', 'documents', '9449b63f-345c-4a7d-bfb1-5ef41d90d2c9.pdf');
-    
+
     if (!fs.existsSync(storedPdfPath)) {
       console.log('❌ PDF file not found');
       return;
     }
-    
+
     const pdf = require('pdf-parse');
     const pdfBuffer = fs.readFileSync(storedPdfPath);
     const pdfData = await pdf(pdfBuffer);
-    
+
     console.log('✅ Extracted', pdfData.text.length, 'characters from', pdfData.numpages, 'pages');
     console.log('📋 Document Type: Tax Form (Form 16)');
     console.log('🔍 Result: Limited technical skills expected (non-technical document)');
-    
+
   } catch (error) {
     console.error('❌ Error:', error.message);
   }

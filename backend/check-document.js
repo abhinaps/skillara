@@ -16,23 +16,23 @@ async function checkDocument() {
 
     // Get the most recent document
     const query = `
-      SELECT 
-        id, 
+      SELECT
+        id,
         session_id,
-        original_filename, 
-        file_type, 
+        original_filename,
+        file_type,
         file_size_bytes,
         file_hash,
         storage_path,
         processing_status,
-        uploaded_at 
-      FROM resume_documents 
-      ORDER BY uploaded_at DESC 
+        uploaded_at
+      FROM resume_documents
+      ORDER BY uploaded_at DESC
       LIMIT 1
     `;
 
     const result = await client.query(query);
-    
+
     if (result.rows.length > 0) {
       const doc = result.rows[0];
       console.log('✅ Most recent document found:');

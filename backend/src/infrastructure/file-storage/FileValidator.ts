@@ -30,7 +30,7 @@ export class FileValidator {
       const { fileTypeFromBuffer } = await import('file-type');
       const fileTypeResult = await fileTypeFromBuffer(buffer);
       detectedMimeType = fileTypeResult?.mime;
-      
+
       // If file-type couldn't detect it, check if it's a text file based on the reported MIME type
       if (!detectedMimeType && reportedMimeType === 'text/plain') {
         // Check if buffer contains mostly text
