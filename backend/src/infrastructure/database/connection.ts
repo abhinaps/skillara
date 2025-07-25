@@ -4,11 +4,11 @@ import * as path from 'path';
 import * as dotenv from 'dotenv';
 
 // Load environment variables
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '../../../../.env') });
 
 // Database connection configuration
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST || 'localhost', // Connect to localhost when running outside container
   port: parseInt(process.env.DB_PORT || '5432'),
   user: process.env.DB_USER || 'skillara_user',
   password: process.env.DB_PASSWORD || 'skillara_dev_password',
@@ -44,8 +44,23 @@ export async function testConnection(): Promise<boolean> {
 export async function runMigrations(): Promise<void> {
   try {
     console.log('🔄 Running database migrations...');
+    console.log('Current directory:', __dirname);
+    console.log('Environment variables:', {
+      DB_HOST: process.env.DB_HOST,
+      DB_PORT: process.env.DB_PORT,
+      DB_NAME: process.env.DB_NAME,
+      DB_USER: process.env.DB_USER,
+    });
+    console.log('Database config:', { ...dbConfig, password: '***' });
+    
+    // Test connection first
+    const connected = await testConnection();
+    if (!connected) {
+      throw new Error('Database connection test failed');
+    }
 
     const migrationsDir = path.join(__dirname, '../../../../database/migrations');
+    console.log('Migrations directory:', migrationsDir);
     const migrationFiles = fs.readdirSync(migrationsDir)
       .filter(file => file.endsWith('.sql'))
       .sort();

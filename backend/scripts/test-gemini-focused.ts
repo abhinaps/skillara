@@ -117,7 +117,8 @@ class GeminiServiceTester {
         }
 
       } catch (error) {
-        console.log(`   ❌ Test failed: ${error.message}`);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.log(`   ❌ Test failed: ${errorMessage}`);
       }
     }
 
@@ -207,7 +208,8 @@ class GeminiServiceTester {
       const result = await this.geminiService.extractSkills('');
       console.log(`   ✅ Handled gracefully: ${result.skills.length} skills found`);
     } catch (error) {
-      console.log(`   ❌ Failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.log(`   ❌ Failed: ${errorMessage}`);
     }
 
     // Test 2: Very short input
@@ -216,7 +218,8 @@ class GeminiServiceTester {
       const result = await this.geminiService.extractSkills('React developer');
       console.log(`   ✅ Handled gracefully: ${result.skills.length} skills found`);
     } catch (error) {
-      console.log(`   ❌ Failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.log(`   ❌ Failed: ${errorMessage}`);
     }
 
     // Test 3: Very long input
@@ -226,7 +229,8 @@ class GeminiServiceTester {
       const result = await this.geminiService.extractSkills(longResume);
       console.log(`   ✅ Handled gracefully: ${result.skills.length} skills found in ${result.processingTime}ms`);
     } catch (error) {
-      console.log(`   ❌ Failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.log(`   ❌ Failed: ${errorMessage}`);
     }
   }
 
@@ -252,7 +256,8 @@ class GeminiServiceTester {
       }
 
     } catch (error) {
-      console.log(`   ❌ Fallback failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.log(`   ❌ Fallback failed: ${errorMessage}`);
     }
   }
 
@@ -278,7 +283,8 @@ class GeminiServiceTester {
         console.log(`     ✅ ${result.skills.length} skills in ${processingTime}ms`);
 
       } catch (error) {
-        console.log(`     ❌ Failed: ${error.message}`);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.log(`     ❌ Failed: ${errorMessage}`);
       }
     }
 
@@ -327,9 +333,10 @@ async function runGeminiTests() {
     console.log('✅ Error handling: VALIDATED');
 
   } catch (error) {
-    console.error('\n❌ Test initialization failed:', error.message);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    console.error('\n❌ Test initialization failed:', errorMessage);
 
-    if (error.message.includes('GEMINI_API_KEY')) {
+    if (error instanceof Error && error.message.includes('GEMINI_API_KEY')) {
       console.log('\n📝 To fix this:');
       console.log('1. Go to https://aistudio.google.com/app/apikey');
       console.log('2. Create a new API key');
