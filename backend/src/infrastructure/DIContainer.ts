@@ -4,12 +4,17 @@ import { db } from '../infrastructure/database/connection';
 // Repository implementations
 import { PostgreSQLSkillRepository } from '../adapters/secondary/database/PostgreSQLSkillRepository';
 import { PostgreSQLUserSkillAssessmentRepository } from '../adapters/secondary/database/PostgreSQLUserSkillAssessmentRepository';
+import { PostgreSQLResumeDocumentRepository } from '../adapters/secondary/database/PostgreSQLResumeDocumentRepository';
 
 // Use cases
 import { CreateSkillUseCase, AssessSkillUseCase, GetUserSkillsUseCase } from '../application/use-cases/skill-management';
 
 // Controllers
 import { SkillController } from '../adapters/primary/web/controllers/SkillController';
+import { FileUploadController } from '../adapters/primary/FileUploadController';
+
+// Infrastructure services
+import { LocalFileStorageService } from '../infrastructure/file-storage/LocalFileStorageService';
 
 /**
  * Dependency Injection Container
@@ -24,6 +29,10 @@ export class DIContainer {
   // Repositories (Secondary Adapters)
   private _skillRepository!: PostgreSQLSkillRepository;
   private _userSkillAssessmentRepository!: PostgreSQLUserSkillAssessmentRepository;
+  private _resumeDocumentRepository!: PostgreSQLResumeDocumentRepository;
+
+  // Infrastructure services
+  private _fileStorageService!: LocalFileStorageService;
 
   // Use Cases (Application Layer)
   private _createSkillUseCase!: CreateSkillUseCase;
@@ -32,9 +41,11 @@ export class DIContainer {
 
   // Controllers (Primary Adapters)
   private _skillController!: SkillController;
+  private _fileUploadController!: FileUploadController;
 
   private constructor() {
     this.initializeInfrastructure();
+    this.initializeServices();
     this.initializeRepositories();
     this.initializeUseCases();
     this.initializeControllers();
@@ -51,9 +62,14 @@ export class DIContainer {
     this._database = db;
   }
 
+  private initializeServices(): void {
+    this._fileStorageService = new LocalFileStorageService();
+  }
+
   private initializeRepositories(): void {
     this._skillRepository = new PostgreSQLSkillRepository(this._database);
     this._userSkillAssessmentRepository = new PostgreSQLUserSkillAssessmentRepository(this._database);
+    this._resumeDocumentRepository = new PostgreSQLResumeDocumentRepository(this._database);
   }
 
   private initializeUseCases(): void {
@@ -73,6 +89,11 @@ export class DIContainer {
       this._createSkillUseCase,
       this._assessSkillUseCase,
       this._getUserSkillsUseCase
+    );
+
+    this._fileUploadController = new FileUploadController(
+      this._fileStorageService,
+      this._resumeDocumentRepository
     );
   }
 
@@ -103,5 +124,17 @@ export class DIContainer {
 
   get skillController(): SkillController {
     return this._skillController;
+  }
+
+  get fileUploadController(): FileUploadController {
+    return this._fileUploadController;
+  }
+
+  get resumeDocumentRepository(): PostgreSQLResumeDocumentRepository {
+    return this._resumeDocumentRepository;
+  }
+
+  get fileStorageService(): LocalFileStorageService {
+    return this._fileStorageService;
   }
 }

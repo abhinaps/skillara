@@ -1,0 +1,18 @@
+This is a test resume document.
+
+John Doe
+Software Engineer
+
+Skills:
+- JavaScript
+- React
+- Node.js
+- Python
+- SQL
+
+Experience:
+- Frontend Developer at ABC Company (2020-2023)
+- Full Stack Developer at XYZ Corp (2018-2020)
+
+Education:
+- Bachelor's in Computer Science, University ABC (2018)

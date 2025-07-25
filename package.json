@@ -78,5 +78,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/abhinaps/skillara.git"
+  },
+  "dependencies": {
+    "form-data": "^4.0.4",
+    "node-fetch": "^2.7.0"
   }
 }
